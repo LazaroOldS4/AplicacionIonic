@@ -34,10 +34,12 @@ import "./theme/variables.css";
 
 setupIonicReact();
 
-export default function App() {
-  return (
+export default function App (){
+  return(
+  <IonApp>
     <ProviderUser>
       <AppNavigation />
-    </ProviderUser>
+      </ProviderUser>
+  </IonApp>
   );
 }
