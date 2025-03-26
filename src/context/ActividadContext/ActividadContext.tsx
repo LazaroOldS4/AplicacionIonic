@@ -1,6 +1,8 @@
-import React, {createContext, useState} from 'react'
+import React, {createContext, useState, useRef} from 'react'
+import {IonModal, IonContent} from "@ionic/react"
 import {ActModel} from '../../models'
 import {ActividadContextType} from './ActividadContext.type'
+import { FormActividades } from '../../components/Actividades'
 
 export const ActividadContext = createContext<ActividadContextType.Context>({
     totalAct: 0,
@@ -15,26 +17,69 @@ export const ActividadContext = createContext<ActividadContextType.Context>({
 
 export function ActividadesProvider (props: ActividadContextType.Props){
     const {children} = props;
+    const modalRef = useRef<HTMLIonModalElement>(null);
 
     const [totalAct, setTotalAct] = useState(8);
     const [totalCompActi, setTotalCompActi] = useState(5);
     const [actividades, setActividades] = useState<ActModel[]>([])
     const [completActi, setCompletActi] = useState<ActModel[]>([])
 
+    const abrirFormActi = () => modalRef.current?.present();
+    const cerrarFormActi = () => modalRef.current?.dismiss();
+    const crearActividad= () => {}
+    const checkCompleto = () => {}
 
+
+/* 
+    console.log("Formulario de actividad abierto");
+};
+
+const crearActividad = (nuevaActividad: ActModel) => {
+    setActividades((prevActividades) => [...prevActividades, nuevaActividad]);
+    setTotalAct((prevTotal) => prevTotal + 1);
+};
+
+const checkCompleto = (idActividad: string) => {
+    setActividades((prevActividades) =>
+        prevActividades.map((actividad) =>
+            actividad.id === idActividad
+                ? { ...actividad, completada: true }
+                : actividad
+        )
+    );
+
+    const actividadCompletada = actividades.find(
+        (actividad) => actividad.id === idActividad
+    );
+
+    if (actividadCompletada) {
+        setCompletActi((prevCompletadas) => [
+            ...prevCompletadas,
+            actividadCompletada,
+        ]);
+        setTotalCompActi((prevTotal) => prevTotal + 1);
+    }
+};
+ */
     const valueContext : ActividadContextType.Context ={
         totalAct,
         totalCompActi,
-        actividades: [],
-        completActi: [],
-        abrirFormActi: () => {},
-        crearActividad: () => {},
-        checkCompleto: () => {},
+        actividades,
+        completActi,
+        abrirFormActi,
+        crearActividad,
+        checkCompleto,
     }
 
     return (
         <ActividadContext.Provider value={valueContext}>
             {children}
+
+            <IonModal ref = {modalRef} trigger = "open-modal" initialBreakpoint = {0.25} breakpoints={[0, 0.35]}>
+                <IonContent className = "ion-padding">
+                    <FormActividades/>
+                </IonContent>
+            </IonModal>
         </ActividadContext.Provider>
     )
 }
